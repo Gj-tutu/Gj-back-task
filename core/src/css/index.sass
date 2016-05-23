@@ -1,0 +1,18 @@
+@import "../../../node_modules/normalize.css/normalize"
+
+@import "config"
+
+html
+    color: $defaultColor
+
+.show
+    display: block
+    
+.hide
+    display: none
+
+@mixin mobile()
+    @media all and (max-width: $mobileSize)
+        @content
+    
+@import "containers/container"

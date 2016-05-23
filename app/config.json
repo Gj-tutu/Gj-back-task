@@ -1,0 +1,23 @@
+{
+    "DEBUG": true,
+    "CORE_CONFIG": {
+        "PORT": 8080,
+        "HOST": "http://127.0.0.1",
+        "STATIC_PORT": 9090
+    },
+    "SERVICE":{
+        "redis": {
+            "host": "redis",
+            "port": 6379,
+            "password": ""
+        },
+        "mysql": {
+            "host": "",
+            "port": 0,
+            "user": "",
+            "password": "",
+            "database": "",
+            "charset": "utf8"
+        }
+    }
+}
