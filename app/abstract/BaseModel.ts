@@ -21,10 +21,12 @@ export class BaseModel{
 
     protected mysql: Mysql;
     protected app: App;
+    private mock: boolean;
 
     public constructor(app: App){
         this.app = app;
         this.mysql = app.mysql()
+        this.mock = process.env.DATE_MODE = "mock" ? true : false;
     }
 
     public static getTime():number{
@@ -35,7 +37,14 @@ export class BaseModel{
 
     protected exec(sql: string):Promise<any>{
         console.log(sql);
+        if(this.mock){
+            return Promise.resolve(BaseModel._mockExec());
+        }
         return this.mysql.promise(sql);
+    }
+
+    private static _mockExec():any[]{
+        return []
     }
 
     protected handle(modelHandle: ModelHandle):Promise<any>{
@@ -56,7 +65,16 @@ export class BaseModel{
             error = "[DB] SQL TYPE not empty"
         }
         if(error) return Promise.reject(new Error(`${error} ERROR SQL: ${sql}`));
+
+        if(this.mock){
+            return Promise.resolve(BaseModel._mockHandle(modelHandle));
+        }
+
         return this.exec(sql);
+    }
+
+    private static _mockHandle(modelHandle: ModelHandle):any[]{
+        return []
     }
 
     protected count(modelHandle: ModelHandle):Promise<number>{
@@ -64,7 +82,16 @@ export class BaseModel{
         if(!modelHandle.where) error = "[DB] SELECT COUNT SQL where not empty";
         let sql = `SELECT COUNT(*) FROM ${modelHandle.tableName} WHERE ${this._where(modelHandle.where)}`;
         if(error) return Promise.reject(new Error(`${error} ERROR SQL: ${sql}`));
+
+        if(this.mock){
+            return Promise.resolve(BaseModel._mockCount(modelHandle));
+        }
+
         return this.exec(sql).then((result:any)=>{return result[0]["COUNT(*)"]});
+    }
+
+    private static _mockCount(modelHandle: ModelHandle):number{
+        return 0
     }
 
     private _v(v:any){

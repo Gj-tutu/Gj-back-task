@@ -11,8 +11,6 @@ import Dispatch from "../../app/abstract/Dispatch";
 import * as Constant from "../Constant";
 import User from "../controllers/user";
 import Playbook from "../controllers/playbook";
-import UserMock from "../controllers_mock/user";
-import PlaybookMock from "../controllers_mock/playbook";
 
 
 export default function routerHandle(app:CoreApp):express.Router{
@@ -30,8 +28,8 @@ export default function routerHandle(app:CoreApp):express.Router{
         }
     }));
 
-    let user = process.env.DATE_MODE = "mock" ? new UserMock(app) : new User(app);
-    let playbook = process.env.DATE_MODE = "mock" ? new Playbook(app) : new Playbook(app);
+    let user = new User(app);
+    let playbook = new Playbook(app);
 
     //user 登录,注册,登出
     router.post("/api/login", user.handle([{name:"email", form:true}, {name:"password", form:true}], user.login));
