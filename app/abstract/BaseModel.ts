@@ -17,15 +17,37 @@ export interface ModelHandle{
     order?:string;
 }
 
+export class MockModel{
+
+    private mockRecord: any[] = [];
+
+    public constructor(mockRecord: any[]){
+        this.mockRecord = mockRecord;
+    }
+
+    public exec():any[]{
+        return this.mockRecord;
+    }
+
+    public handle(modelHandle: ModelHandle):any[]{
+        return this.mockRecord;
+    }
+
+    public count(modelHandle: ModelHandle):number{
+        return this.mockRecord.length;
+    }
+}
+
 export class BaseModel{
 
     protected mysql: Mysql;
     protected app: App;
     private mock: boolean;
+    protected mockData: any[];
 
     public constructor(app: App){
         this.app = app;
-        this.mysql = app.mysql()
+        this.mysql = app.mysql();
         this.mock = process.env.DATE_MODE = "mock" ? true : false;
     }
 
@@ -38,13 +60,9 @@ export class BaseModel{
     protected exec(sql: string):Promise<any>{
         console.log(sql);
         if(this.mock){
-            return Promise.resolve(BaseModel._mockExec());
+            return Promise.resolve(new MockModel(this.mockData).exec());
         }
         return this.mysql.promise(sql);
-    }
-
-    private static _mockExec():any[]{
-        return []
     }
 
     protected handle(modelHandle: ModelHandle):Promise<any>{
@@ -67,14 +85,10 @@ export class BaseModel{
         if(error) return Promise.reject(new Error(`${error} ERROR SQL: ${sql}`));
 
         if(this.mock){
-            return Promise.resolve(BaseModel._mockHandle(modelHandle));
+            return Promise.resolve(new MockModel(this.mockData).handle(modelHandle));
         }
 
         return this.exec(sql);
-    }
-
-    private static _mockHandle(modelHandle: ModelHandle):any[]{
-        return []
     }
 
     protected count(modelHandle: ModelHandle):Promise<number>{
@@ -84,14 +98,10 @@ export class BaseModel{
         if(error) return Promise.reject(new Error(`${error} ERROR SQL: ${sql}`));
 
         if(this.mock){
-            return Promise.resolve(BaseModel._mockCount(modelHandle));
+            return Promise.resolve(new MockModel(this.mockData).count(modelHandle));
         }
 
         return this.exec(sql).then((result:any)=>{return result[0]["COUNT(*)"]});
-    }
-
-    private static _mockCount(modelHandle: ModelHandle):number{
-        return 0
     }
 
     private _v(v:any){
