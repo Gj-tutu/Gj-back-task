@@ -9,6 +9,12 @@ export class Record{
 
     private data:any = {};
 
+    protected filedMap:any = {
+        create_time: "createTime",
+        update_time: "updateTime",
+        delete_time: "deleteTime"
+    };
+
     constructor(data?: any){
         if(data) this.data = data;
     }
@@ -21,8 +27,8 @@ export class Record{
         this.data[key] = val;
     }
 
-    get creativeTime(){
-        return this.get("creative_time");
+    get createTime(){
+        return this.get("create_time");
     }
 
     get updateTime(){
@@ -34,14 +40,18 @@ export class Record{
     }
 
     public toJson(list?: string[]){
-        if(list){
-            let _data: any = {};
-            for(let i in list){
-                _data[list[i]] = this.get(list[i])
+        let _self:any = this;
+        if(!list){
+            list = [];
+            for(let i in this.data){
+                list.push(i);
             }
-            return _data;
         }
-        return this.data;
+        let _data: any = {};
+        for(let i in list){
+            _data[list[i]] = this.filedMap[list[i]] ? _self[this.filedMap[list[i]]] : _self[list[i]];
+        }
+        return _data;
     }
 }
 
@@ -203,7 +213,7 @@ export class Model extends BaseModel{
         });
     }
 
-    public save(data: Record):Promise<Record>{
+    public save(data: Record):Promise<any>{
         if(data.get(this.createTime)){
             return this.update(data);
         }else{
