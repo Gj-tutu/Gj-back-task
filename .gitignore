@@ -4,7 +4,7 @@ typings
 node_modules
 static
 
-app/resource.json
+core/src/resource.json
 core/**/*.js
 core/**/*.js.map
 data/**/*.js

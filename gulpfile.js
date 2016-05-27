@@ -68,7 +68,7 @@ function webpackConfig (){
             })
         ];
         if(!__DEV__){
-            output.fileName = "[name]-[chunkHash].js";
+            output.filename = "[name]-[chunkHash].js";
             plugins.push(
                 new webpack.optimize.UglifyJsPlugin({
                 compress: {

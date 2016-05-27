@@ -26,8 +26,8 @@ do
         then
             r=${r}","
         fi
-        y_t=${y%-*}
         y_t=${y%.*}
+        y_t=${y_t%-*}
         y_h=${y##*-}
         r=${r}"\"${y_t}\":\"${path}"/"${x}"/"${y_h}\""
         if [ ${y} != ${y_h} ]
@@ -41,4 +41,4 @@ do
 done
 r=${r}"}"
 
-`echo ${r} > "./app/resource.json"`
+`echo ${r} > "./core/src/resource.json"`
