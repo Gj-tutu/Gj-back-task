@@ -60,6 +60,7 @@
     "tsd-install": "tsd install --save ",
     "tsd": "tsd install && chmod -R +x typings",
     "start": "node index.js start",
+    "mock": "node mock.js",
     "dev": "supervisor dev.js & gulp webpack-dev-server",
     "test": "mocha --recursive --bail ",
     "test-cov": "node ./node_modules/istanbul-harmony/lib/cli.js cover ./node_modules/mocha/bin/_mocha --recursive test/ --bail"
