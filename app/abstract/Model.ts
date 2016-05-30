@@ -9,7 +9,7 @@ export class Record{
 
     private data:any = {};
 
-    protected filedMap:any = {
+    protected fieldMap:any = {
         create_time: "createTime",
         update_time: "updateTime",
         delete_time: "deleteTime"
@@ -49,7 +49,7 @@ export class Record{
         }
         let _data: any = {};
         for(let i in list){
-            _data[list[i]] = this.filedMap[list[i]] ? _self[this.filedMap[list[i]]] : _self[list[i]];
+            _data[list[i]] = this.fieldMap[list[i]] ? _self[this.fieldMap[list[i]]] : _self[list[i]];
         }
         return _data;
     }
@@ -62,7 +62,7 @@ export class Model extends BaseModel{
     protected createTime:string = "create_time";
     protected updateTime:string = "update_time";
     protected deleteTime:string = "delete_time";
-    protected filed:string[];
+    protected field:string[];
 
     protected formatData(data: any):Record{
         let record:any = {};
@@ -169,7 +169,7 @@ export class Model extends BaseModel{
 
     public update(data: Record):Promise<Record>{
         data.set(this.updateTime, BaseModel.getTime());
-        let keys: any[] = this.filed;
+        let keys: any[] = this.field;
         let values: any = {};
         for(let i=0;i<keys.length;i++){
             if(keys[i] == this.key){
@@ -194,7 +194,7 @@ export class Model extends BaseModel{
 
     public add(data: Record):Promise<Record>{
         data.set(this.createTime, BaseModel.getTime());
-        let keys: any[] = this.filed;
+        let keys: any[] = this.field;
         let values: any = {};
         for(let i=0;i<keys.length;i++){
             if(keys[i] == this.key){

@@ -48,7 +48,7 @@ export class UserModel extends Model{
 
     public key: string = "id";
 
-    public filed: string[] = ["id", "email", "password", "state", "token", "create_time", "update_time", "delete_time"];
+    public field: string[] = ["id", "email", "password", "state", "token", "create_time", "update_time", "delete_time"];
 
     protected formatData(data: any){
         let record:any = {};

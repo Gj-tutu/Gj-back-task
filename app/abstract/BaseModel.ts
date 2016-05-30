@@ -11,7 +11,7 @@ export interface ModelHandle{
 
     tableName:string;
     where?:any[];
-    filed?:string[];
+    field?:string[];
     value?:any;
     limit?:string;
     order?:string;
@@ -25,8 +25,8 @@ export class MockModel{
         this.mockRecord = mockRecord;
     }
 
-    public exec():any[]{
-        return this.mockRecord;
+    public exec(sql: string):any{
+        throw new Error(`[DB] MOCK MODEL not do exec sql ${sql}`); 
     }
 
     public handle(modelHandle: ModelHandle):any[]{
@@ -60,7 +60,7 @@ export class BaseModel{
     protected exec(sql: string):Promise<any>{
         console.log(sql);
         if(this.mock){
-            return Promise.resolve(new MockModel(this.mockData).exec());
+            return Promise.resolve(new MockModel(this.mockData).exec(sql));
         }
         return this.mysql.promise(sql);
     }
@@ -69,16 +69,16 @@ export class BaseModel{
         let sql = "";
         let error:any = null;
         if(modelHandle.add){
-            if(!modelHandle.value && !modelHandle.filed) error = "[DB] INSERT SQL value and filed not empty";
-            sql = `INSERT INTO ${modelHandle.tableName} ${this._addValue(modelHandle.value, modelHandle.filed)}`;
+            if(!modelHandle.value && !modelHandle.field) error = "[DB] INSERT SQL value and field not empty";
+            sql = `INSERT INTO ${modelHandle.tableName} ${this._addValue(modelHandle.value, modelHandle.field)}`;
         }else if(modelHandle.select){
             if(!modelHandle.where) error = "[DB] SELECT SQL where not empty";
             modelHandle.limit = modelHandle.limit ? `LIMIT ${modelHandle.limit}` : "";
             modelHandle.order = modelHandle.order ? `ORDER BY ${modelHandle.order}` : "";
-            sql = `SELECT ${this._filed(modelHandle.filed)} FROM ${modelHandle.tableName} WHERE ${this._where(modelHandle.where)} ${modelHandle.order} ${modelHandle.limit}`;
+            sql = `SELECT ${this._field(modelHandle.field)} FROM ${modelHandle.tableName} WHERE ${this._where(modelHandle.where)} ${modelHandle.order} ${modelHandle.limit}`;
         }else if(modelHandle.update){
             if(!modelHandle.where || !modelHandle.value) error = "[DB] UPDATE SQL where or value not empty";
-            sql = `UPDATE ${modelHandle.tableName} SET ${this._setValue(modelHandle.value, modelHandle.filed)} WHERE ${this._where(modelHandle.where)}`;
+            sql = `UPDATE ${modelHandle.tableName} SET ${this._setValue(modelHandle.value, modelHandle.field)} WHERE ${this._where(modelHandle.where)}`;
         }else{
             error = "[DB] SQL TYPE not empty"
         }
@@ -118,33 +118,33 @@ export class BaseModel{
         return `\`${f}\``;
     }
 
-    private _addValue(value:any={}, filed:string[]=[]):string{
+    private _addValue(value:any={}, field:string[]=[]):string{
         let tmp:any[] = [];
-        let filedTmp:any[] = [];
-        if(filed.length>0){
-            for(let i in filed){
-                let v = value[filed[i]] !== "undefined" ? true : false;
+        let fieldTmp:any[] = [];
+        if(field.length>0){
+            for(let i in field){
+                let v = value[field[i]] !== "undefined" ? true : false;
                 if (v){
-                    filedTmp.push(this._f(filed[i]));
-                    tmp.push(this._v(value[filed[i]]));
+                    fieldTmp.push(this._f(field[i]));
+                    tmp.push(this._v(value[field[i]]));
                 }
             }
         }else{
             for(let i in value){
-                filedTmp.push(this._f(i));
+                fieldTmp.push(this._f(i));
                 tmp.push(this._v(value[i]));
             }
         }
-        return `(${filedTmp.join(",")}) VALUES (${tmp.join(",")})`;
+        return `(${fieldTmp.join(",")}) VALUES (${tmp.join(",")})`;
     }
 
-    private _setValue(value:any={}, filed:string[]=[]):string{
+    private _setValue(value:any={}, field:string[]=[]):string{
         let tmp:any[] = [];
-        if(filed.length>0){
-            for(let i in filed){
-                let v = value[filed[i]] !== "undefined" ? true : false;
+        if(field.length>0){
+            for(let i in field){
+                let v = value[field[i]] !== "undefined" ? true : false;
                 if (v){
-                    tmp.push(`${this._f(filed[i])}=${this._v(value[filed[i]])}`);
+                    tmp.push(`${this._f(field[i])}=${this._v(value[field[i]])}`);
                 }
             }
         }else{
@@ -155,11 +155,11 @@ export class BaseModel{
         return tmp.join(",");
     }
 
-    private _filed(filed:any[]=[]):string{
-        for(let i in filed){
-            filed[i] = this._f(filed[i])
+    private _field(field:any[]=[]):string{
+        for(let i in field){
+            field[i] = this._f(field[i])
         }
-        return filed.length>0 ? filed.join(",") : "*";
+        return field.length>0 ? field.join(",") : "*";
     }
 
     private _where(where:any[]=[]):string{
