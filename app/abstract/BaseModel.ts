@@ -30,11 +30,35 @@ export class MockModel{
     }
 
     public handle(modelHandle: ModelHandle):any[]{
-        return this.mockRecord;
+        let _data: any[] = [];
+        if(modelHandle.select){
+            if(modelHandle.where){
+                _data = this.mockRecord.filter((item:any)=>{
+                    return MockModel.where(item, modelHandle.where);
+                });
+            }else{
+                _data = this.mockRecord;
+            }
+        }else if(modelHandle.add){
+
+        }else if(modelHandle.update){
+
+        }
+        return _data;
     }
 
     public count(modelHandle: ModelHandle):number{
+        if(modelHandle.where){
+            let _data = this.mockRecord.filter((item:any)=>{
+                return MockModel.where(item, modelHandle.where);
+            });
+            return _data.length;
+        }
         return this.mockRecord.length;
+    }
+
+    public static where(item: any, where: any[]):boolean{
+        return true
     }
 }
 
