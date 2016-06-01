@@ -86,6 +86,7 @@ export class Model extends BaseModel{
 
     public updateByKey(key: number, data:any):Promise<any>{
         let modelHandle: ModelHandle = {
+            key: this.key,
             tableName: this.tableName,
             update: true,
             value: data,
@@ -112,6 +113,7 @@ export class Model extends BaseModel{
 
     public get(key: number):Promise<Record>{
         let modelHandle: ModelHandle = {
+            key: this.key,
             tableName: this.tableName,
             select: true,
             where: [[this.key, "=", key], [this.deleteTime, "=", 0]],
@@ -127,6 +129,7 @@ export class Model extends BaseModel{
     public getList(where:any[] = [], startNum:number = 0, num:number = 100):Promise<Record[]>{
         where.push([this.deleteTime, "=", 0]);
         let modelHandle: ModelHandle = {
+            key: this.key,
             tableName: this.tableName,
             select: true,
             where: where,
@@ -145,6 +148,7 @@ export class Model extends BaseModel{
     public getOne(where:any[] = []):Promise<Record>{
         where.push([this.deleteTime, "=", 0]);
         let modelHandle: ModelHandle = {
+            key: this.key,
             tableName: this.tableName,
             select: true,
             where: where,
@@ -160,6 +164,7 @@ export class Model extends BaseModel{
     public getCount(where:any[] = []):Promise<number>{
         where.push([this.deleteTime, "=", 0]);
         let modelHandle: ModelHandle = {
+            key: this.key,
             tableName: this.tableName,
             select: true,
             where: where
@@ -178,6 +183,7 @@ export class Model extends BaseModel{
             values[keys[i]] = data.get(keys[i]);
         }
         let modelHandle: ModelHandle = {
+            key: this.key,
             tableName: this.tableName,
             update: true,
             value: values,
@@ -203,6 +209,7 @@ export class Model extends BaseModel{
             values[keys[i]] = data.get(keys[i]);
         }
         let modelHandle: ModelHandle = {
+            key: this.key,
             tableName: this.tableName,
             add: true,
             value: values
@@ -219,7 +226,5 @@ export class Model extends BaseModel{
         }else{
             return this.add(data);
         }
-
     }
-
 }

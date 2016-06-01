@@ -15,6 +15,8 @@ export interface ModelHandle{
     value?:any;
     limit?:string;
     order?:string;
+
+    key?:string;
 }
 
 export class MockModel{
@@ -29,20 +31,46 @@ export class MockModel{
         throw new Error(`[DB] MOCK MODEL not do exec sql ${sql}`); 
     }
 
-    public handle(modelHandle: ModelHandle):any[]{
-        let _data: any[] = [];
+    public handle(modelHandle: ModelHandle):any{
+        let _data: any = {};
         if(modelHandle.select){
+            let sData: any[] = [];
             if(modelHandle.where){
-                _data = this.mockRecord.filter((item:any)=>{
+                sData = this.mockRecord.filter((item:any)=>{
                     return MockModel.where(item, modelHandle.where);
                 });
             }else{
-                _data = this.mockRecord;
+                sData = this.mockRecord;
             }
+            _data = sData;
         }else if(modelHandle.add){
-
+            let nData:any = {};
+            for(let i in modelHandle.value){
+                nData[i] = _data[modelHandle.value[i]]
+            }
+            if(modelHandle.key){
+                _data['insertId'] = this.mockRecord.length;
+                nData[modelHandle.key] = _data['insertId']
+            }
+            this.mockRecord.push(nData);
+            _data['changedRows'] = 1
         }else if(modelHandle.update){
-
+            let uData:any[] = [];
+            if(modelHandle.where){
+                uData = this.mockRecord.filter((item:any)=>{
+                    return MockModel.where(item, modelHandle.where);
+                });
+            }else{
+                uData = this.mockRecord;
+            }
+            if(uData.length > 0){
+                for(let i in uData){
+                    for(let n in modelHandle.value){
+                        uData[n] = modelHandle.value[n]
+                    }
+                }
+            }
+            _data['changedRows'] = uData.length
         }
         return _data;
     }
@@ -68,6 +96,7 @@ export class BaseModel{
     protected app: App;
     private mock: boolean;
     protected mockData: any[];
+    protected key: any;
 
     public constructor(app: App){
         this.app = app;
