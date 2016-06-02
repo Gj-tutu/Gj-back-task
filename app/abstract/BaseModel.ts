@@ -42,6 +42,15 @@ export class MockModel{
             }else{
                 sData = this.mockRecord;
             }
+            if(modelHandle.limit){
+
+            }
+            if(modelHandle.order){
+                
+            }
+            if(modelHandle.field){
+
+            }
             _data = sData;
         }else if(modelHandle.add){
             let nData:any = {};
@@ -66,7 +75,7 @@ export class MockModel{
             if(uData.length > 0){
                 for(let i in uData){
                     for(let n in modelHandle.value){
-                        uData[n] = modelHandle.value[n]
+                        uData[i][n] = modelHandle.value[n]
                     }
                 }
             }
