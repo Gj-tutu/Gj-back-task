@@ -4,6 +4,7 @@
 import {Mysql} from "../../app/tools/Mysql";
 import App from "../../app/App";
 import {BaseModel, ModelHandle} from "./BaseModel";
+import {MODEL_ORDER_DESC} from "./BaseModel";
 
 export class Record{
 
@@ -117,7 +118,7 @@ export class Model extends BaseModel{
             tableName: this.tableName,
             select: true,
             where: [[this.key, "=", key], [this.deleteTime, "=", 0]],
-            order: `${this.key} DESC`,
+            order: [this.key, MODEL_ORDER_DESC],
             limit: [0, 1]
         };
         return this.handle(modelHandle).then((result: any[])=>{
@@ -133,7 +134,7 @@ export class Model extends BaseModel{
             tableName: this.tableName,
             select: true,
             where: where,
-            order: `${this.key} DESC`,
+            order: [this.key, MODEL_ORDER_DESC],
             limit: [startNum, num]
         };
         return this.handle(modelHandle).then((result: any[])=>{
@@ -152,7 +153,7 @@ export class Model extends BaseModel{
             tableName: this.tableName,
             select: true,
             where: where,
-            order: `${this.key} DESC`,
+            order: [this.key, MODEL_ORDER_DESC],
             limit: [0, 1]
         };
         return this.handle(modelHandle).then((result: any[])=>{

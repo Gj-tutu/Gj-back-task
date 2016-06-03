@@ -14,10 +14,13 @@ export interface ModelHandle{
     field?:string[];
     value?:any;
     limit?:number[];
-    order?:string;
+    order?:string[];
 
     key?:string;
 }
+
+export const MODEL_ORDER_ASC = "asc";
+export const MODEL_ORDER_DESC = "desc";
 
 export class MockModel{
 
@@ -43,7 +46,15 @@ export class MockModel{
                 sData = this.mockRecord;
             }
             if(modelHandle.order){
-
+                let _tmpOrder:any[] = [];
+                _tmpOrder = sData.sort((itemA:any, itemB:any)=>{
+                    if(modelHandle.order[1] == MODEL_ORDER_ASC){
+                        return -1
+                    }else{
+                        return 1
+                    }
+                });
+                sData = _tmpOrder;
             }
             if(modelHandle.limit){
                 let _tmpLimit:any[] = [];
@@ -141,7 +152,7 @@ export class BaseModel{
         }else if(modelHandle.select){
             if(!modelHandle.where) error = "[DB] SELECT SQL where not empty";
             let limit = modelHandle.limit ? `LIMIT ${modelHandle.limit[0]}, ${modelHandle.limit[1]}` : "";
-            let order = modelHandle.order = modelHandle.order ? `ORDER BY ${modelHandle.order}` : "";
+            let order = modelHandle.order ? `ORDER BY ${modelHandle.order[0]} ${modelHandle.order[1]}` : "";
             sql = `SELECT ${this._field(modelHandle.field)} FROM ${modelHandle.tableName} WHERE ${this._where(modelHandle.where)} ${order} ${limit}`;
         }else if(modelHandle.update){
             if(!modelHandle.where || !modelHandle.value) error = "[DB] UPDATE SQL where or value not empty";

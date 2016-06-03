@@ -7,6 +7,7 @@ import * as Constant from "../Constant";
 import {Record, Model} from "../../app/abstract/Model";
 import {md5} from "../../app/tools/StringHandle";
 import {ModelHandle} from "../../app/abstract/BaseModel";
+import {MODEL_ORDER_DESC} from "../../app/abstract/BaseModel";
 
 export class Playbook extends Record{
 
@@ -101,7 +102,7 @@ export class PlaybookModel extends Model{
             tableName: this.tableName,
             select: true,
             where: [["type", "=", type]],
-            order: `${this.updateTime} DESC`,
+            order: [this.updateTime, MODEL_ORDER_DESC],
             limit: [0, 1]
         };
         if(auto){
