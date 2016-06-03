@@ -102,7 +102,7 @@ export class PlaybookModel extends Model{
             select: true,
             where: [["type", "=", type]],
             order: `${this.updateTime} DESC`,
-            limit: "0,1"
+            limit: [0, 1]
         };
         if(auto){
             modelHandle.where.push(["auto", "=", "1"]);

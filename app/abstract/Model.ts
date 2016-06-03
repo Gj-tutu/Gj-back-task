@@ -118,7 +118,7 @@ export class Model extends BaseModel{
             select: true,
             where: [[this.key, "=", key], [this.deleteTime, "=", 0]],
             order: `${this.key} DESC`,
-            limit: "0,1"
+            limit: [0, 1]
         };
         return this.handle(modelHandle).then((result: any[])=>{
             if(!result || result.length <= 0) return null;
@@ -134,7 +134,7 @@ export class Model extends BaseModel{
             select: true,
             where: where,
             order: `${this.key} DESC`,
-            limit: `${startNum}, ${num}`
+            limit: [startNum, num]
         };
         return this.handle(modelHandle).then((result: any[])=>{
             if(!result || result.length <= 0) return [];
@@ -153,7 +153,7 @@ export class Model extends BaseModel{
             select: true,
             where: where,
             order: `${this.key} DESC`,
-            limit: `0, 1`
+            limit: [0, 1]
         };
         return this.handle(modelHandle).then((result: any[])=>{
             if(!result || result.length <= 0) return null;

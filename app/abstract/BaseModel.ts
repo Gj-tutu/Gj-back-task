@@ -13,7 +13,7 @@ export interface ModelHandle{
     where?:any[];
     field?:string[];
     value?:any;
-    limit?:string;
+    limit?:number[];
     order?:string;
 
     key?:string;
@@ -42,11 +42,16 @@ export class MockModel{
             }else{
                 sData = this.mockRecord;
             }
-            if(modelHandle.limit){
+            if(modelHandle.order){
 
             }
-            if(modelHandle.order){
-                
+            if(modelHandle.limit){
+                let _tmpLimit:any[] = [];
+                for(let i=modelHandle.limit[0];i<=modelHandle.limit[0]+modelHandle.limit[1];i++){
+                    if(!sData[i]) break;
+                    _tmpLimit.push(sData[i])
+                }
+                sData = _tmpLimit;
             }
             if(modelHandle.field){
 
@@ -135,9 +140,9 @@ export class BaseModel{
             sql = `INSERT INTO ${modelHandle.tableName} ${this._addValue(modelHandle.value, modelHandle.field)}`;
         }else if(modelHandle.select){
             if(!modelHandle.where) error = "[DB] SELECT SQL where not empty";
-            modelHandle.limit = modelHandle.limit ? `LIMIT ${modelHandle.limit}` : "";
-            modelHandle.order = modelHandle.order ? `ORDER BY ${modelHandle.order}` : "";
-            sql = `SELECT ${this._field(modelHandle.field)} FROM ${modelHandle.tableName} WHERE ${this._where(modelHandle.where)} ${modelHandle.order} ${modelHandle.limit}`;
+            let limit = modelHandle.limit ? `LIMIT ${modelHandle.limit[0]}, ${modelHandle.limit[1]}` : "";
+            let order = modelHandle.order = modelHandle.order ? `ORDER BY ${modelHandle.order}` : "";
+            sql = `SELECT ${this._field(modelHandle.field)} FROM ${modelHandle.tableName} WHERE ${this._where(modelHandle.where)} ${order} ${limit}`;
         }else if(modelHandle.update){
             if(!modelHandle.where || !modelHandle.value) error = "[DB] UPDATE SQL where or value not empty";
             sql = `UPDATE ${modelHandle.tableName} SET ${this._setValue(modelHandle.value, modelHandle.field)} WHERE ${this._where(modelHandle.where)}`;
