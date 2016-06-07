@@ -67,6 +67,7 @@ export default class Playbook extends Controller{
         if(!playbookType) return Promise.reject(new Error("playbook type 选择错误"));
         playbookType = new playbookType(this.app);
         playbookType.setParam(JSON.parse(param));
+        playbookType.setAuto(false);
         return playbookType.save().then((playbookRecord:PlaybookRecord)=>{
             let task = this.app.task();
             task.events.emit("add", Constant.TASK_TYPE_PLAYBOOK, playbookRecord.id);

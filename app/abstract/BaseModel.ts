@@ -72,10 +72,10 @@ export class MockModel{
         }else if(modelHandle.add){
             let nData:any = {};
             for(let i in modelHandle.value){
-                nData[i] = _data[modelHandle.value[i]]
+                nData[i] = modelHandle.value[i]
             }
             if(modelHandle.key){
-                _data['insertId'] = this.mockRecord.length;
+                _data['insertId'] = this.mockRecord.length + 1;
                 nData[modelHandle.key] = _data['insertId']
             }
             this.mockRecord.push(nData);
@@ -191,7 +191,7 @@ export class BaseModel{
         if(error) return Promise.reject(new Error(`${error} ERROR SQL: ${sql}`));
 
         if(this.mock){
-            return Promise.resolve(new MockModel(this.mockData).handle(modelHandle));
+            return Promise.resolve(new MockModel(this.mockData).handle(modelHandle)).then((result)=>{return result});
         }
 
         return this.exec(sql);

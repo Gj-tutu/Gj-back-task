@@ -48,7 +48,14 @@ export class UserModel extends Model{
 
     public key: string = "id";
 
+    private static _mockData: any[] = [];
+
     public field: string[] = ["id", "email", "password", "state", "token", "create_time", "update_time", "delete_time"];
+
+    public constructor(app: CoreApp){
+        super(app);
+        this.mockData = UserModel._mockData;
+    }
 
     protected formatData(data: any){
         let record:any = {};

@@ -34,7 +34,7 @@ class Header extends React.Component<HeaderProp, any> {
         return (
             <AppBar
                 style={{position:"fixed"}}
-                title="内部工具"
+                title="脚本处理"
                 iconElementLeft={<IconButton style={leftMenuStyle} onTouchTap={this.props.mainAction.leftShow}><NavigationMenu /></IconButton>}
                 iconElementRight={
                   <IconMenu

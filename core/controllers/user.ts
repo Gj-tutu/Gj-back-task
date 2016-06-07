@@ -13,6 +13,8 @@ import CoreApp from "../App";
 
 export default class User extends Controller{
 
+    protected app:CoreApp;
+
     constructor(app:CoreApp){
         super(app);
         this.setResultFun(this.resultHandle)

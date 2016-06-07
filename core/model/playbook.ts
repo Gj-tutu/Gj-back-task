@@ -82,7 +82,14 @@ export class PlaybookModel extends Model{
 
     public key: string = "id";
 
+    private static _mockData: any[] = [];
+
     public field: string[] = ["id", "type", "auto", "state", "script", "param", "result", "create_time", "update_time", "delete_time"];
+
+    public constructor(app: CoreApp){
+        super(app);
+        this.mockData = PlaybookModel._mockData;
+    }
 
     protected formatData(data: any){
         let record:any = {};

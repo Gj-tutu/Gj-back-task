@@ -16,8 +16,17 @@ export class Record{
         delete_time: "deleteTime"
     };
 
+    protected defaultValue: any = {
+        create_time: 0,
+        update_time: 0,
+        delete_time: 0
+    };
+
     constructor(data?: any){
         if(data) this.data = data;
+        for(let i in this.defaultValue){
+            this.data[i] = this.defaultValue[i]
+        }
     }
 
     get(key: string): any{
