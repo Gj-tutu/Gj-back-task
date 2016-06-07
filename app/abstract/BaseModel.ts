@@ -3,6 +3,7 @@
  */
 import {Mysql} from "../../app/tools/Mysql";
 import App from "../../app/App";
+import {inArray} from "../tools/Util";
 
 export interface ModelHandle{
     select?:boolean;
@@ -111,6 +112,33 @@ export class MockModel{
     }
 
     public static where(item: any, where: any[]):boolean{
+        for (let i in where){
+            if (where[i].length != 3) return false;
+            switch (where[i][1]){
+                case "=":
+                    if(item[where[i][0]] != where[i][2]) return false;
+                    break;
+                case "<":
+                    if(item[where[i][0]] >= where[i][2]) return false;
+                    break;
+                case ">":
+                    if(item[where[i][0]] <= where[i][2]) return false;
+                    break;
+                case "<=":
+                    if(item[where[i][0]] > where[i][2]) return false;
+                    break;
+                case ">=":
+                    if(item[where[i][0]] < where[i][2]) return false;
+                    break;
+                case "in":
+                    if(!inArray(item[where[i][0]], where[i][2])) return false;
+                    break;
+                case "like":
+                    break;
+                default:
+                    return false;
+            }
+        }
         return true
     }
 }
