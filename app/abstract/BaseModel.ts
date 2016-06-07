@@ -148,7 +148,7 @@ export class BaseModel{
     protected mysql: Mysql;
     protected app: App;
     private mock: boolean;
-    protected mockData: any[];
+    protected mockData: any[] = [];
     protected key: any;
 
     public constructor(app: App){

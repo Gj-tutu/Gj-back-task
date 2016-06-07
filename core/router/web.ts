@@ -19,7 +19,7 @@ export default function routerHandle(app: CoreApp){
 
     router.get("*", function(req: express.Request, res: express.Response, next: any){
         let data = {User: {email: req.session['user'] ? req.session['user']['email'] : ""}};
-        let resource = jsonFile.read("../src/resource");
+        let resource = jsonFile.read("../../core/src/resource");
         let dev = app.config.DEBUG ? true : false;
         res.render("index", {dev: dev, data: JSON.stringify(data), resource: resource, resUrl:function(url: string){
             return dev ? app.config.CORE_CONFIG.HOST + ":" + app.config.CORE_CONFIG.STATIC_PORT + "/" + url : url + "?" + md5String;

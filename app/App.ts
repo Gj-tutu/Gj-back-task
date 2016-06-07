@@ -11,7 +11,7 @@ import {Mysql, connect as connectMysql} from "./tools/Mysql";
 import {Redis, connect as connectRedis} from "./tools/Redis";
 import {Email, connect as connectEmail} from "./tools/Email";
 
-const config = jsonFile.read("app/config");
+const config = jsonFile.read("../config");
 
 class App {
 
