@@ -1,11 +1,11 @@
 # Gj-back-task
-> 目前直接展示还未完成，因为需要访问数据库，会短期内完成mock模式用来展示
+> mock模式完成,可以直接通过命令查看展示
 
 + 初始化
 > npm run init
 
-+ 启动
-> npm run start core
++ 启动mock
+> npm run mock
 
 + 访问浏览器
 > 127.0.0.1:8080
@@ -15,6 +15,7 @@
 + 前端页面实现用react结合material-ui进行展示和操作
 
 ## 后续开发
-+ mysql数据库mock模式
++ 修改任务添加页面样式
++ 修改demo任务内容,丰富一下功能
 + 添加model关联方式
 + 定时任务的功能扩展
