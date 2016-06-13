@@ -25,12 +25,14 @@ export class Record{
     constructor(data?: any){
         if(data) this.data = data;
         for(let i in this.defaultValue){
-            this.data[i] = this.defaultValue[i]
+            if(!this.data[i]){
+                this.data[i] = this.defaultValue[i];
+            }
         }
     }
 
     get(key: string): any{
-        return this.data[key] === "undefined" ? "" : this.data[key];
+        return this.data[key] == "undefined" ? "" : this.data[key];
     }
 
     set(key: string, val: any): any{

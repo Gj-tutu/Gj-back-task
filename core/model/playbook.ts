@@ -100,7 +100,7 @@ export class PlaybookModel extends Model{
     }
 
     public getWaitPlaybook():Promise<Playbook[]>{
-        let where = [["state", "in", `${Constant.WAIT},${Constant.ING}`]];
+        let where = [["state", "in", [Constant.WAIT, Constant.ING]]];
         return this.getList(where);
     }
 
@@ -113,7 +113,7 @@ export class PlaybookModel extends Model{
             limit: [0, 1]
         };
         if(auto){
-            modelHandle.where.push(["auto", "=", "1"]);
+            modelHandle.where.push(["auto", "=", 1]);
         }
         return this.handle(modelHandle).then((result: any[])=>{
             if(!result || result.length <= 0) return {};

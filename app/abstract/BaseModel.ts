@@ -131,6 +131,7 @@ export class MockModel{
                     if(item[where[i][0]] < where[i][2]) return false;
                     break;
                 case "in":
+                    console.log(where);
                     if(!inArray(item[where[i][0]], where[i][2])) return false;
                     break;
                 case "like":
@@ -275,7 +276,7 @@ export class BaseModel{
                 tmp.push(where[i]);
             }else if(typeof where[i] === "object"){
                 if(where[i][1] == "in"){
-                    tmp.push(`${this._f(where[i][0])} ${where[i][1]} (${where[i][2]})`);
+                    tmp.push(`${this._f(where[i][0])} ${where[i][1]} (${where[i][2].join(",")})`);
                 }else{
                     tmp.push(`${this._f(where[i][0])} ${where[i][1]} ${this._v(where[i][2])}`);
                 }
