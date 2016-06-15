@@ -20,7 +20,7 @@ class Demo extends Base {
         if(this.props.id){
             return (
                 <div>
-                    {this.props.playbook.result}
+                    {JSON.stringify(this.props.playbook.result)}
                 </div>
             );
         }else{

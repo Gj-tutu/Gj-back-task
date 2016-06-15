@@ -44,7 +44,7 @@ class PlaybookFactory extends React.Component<AppProp, any> {
         if(playbook){
             return this.echo(playbook["type"], this.getSetting(playbook["type"]), id, playbook);
         }else{
-            return <div>加载中</div>;
+            return (<div>加载中</div>);
         }
     }
 
@@ -66,11 +66,11 @@ class PlaybookFactory extends React.Component<AppProp, any> {
 
     private echo(type: string, setting:any, id?:number, playbook?:any){
         if(type == "demo"){
-            return <Demo setting={setting} id={id} playbook={playbook} action={this.props.playbookAction}/>
+            return (<Demo setting={setting} id={id} playbook={playbook} action={this.props.playbookAction}/>)
         }else if(type == "demo1"){
-            return <Demo1 setting={setting} id={id} playbook={playbook} action={this.props.playbookAction}/>
+            return (<Demo1 setting={setting} id={id} playbook={playbook} action={this.props.playbookAction}/>)
         }else{
-            return <Base setting={setting} id={id} playbook={playbook} action={this.props.playbookAction}/>
+            return (<Base setting={setting} id={id} playbook={playbook} action={this.props.playbookAction}/>)
         }
     }
 }
