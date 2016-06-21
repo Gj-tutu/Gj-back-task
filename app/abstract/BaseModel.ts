@@ -27,8 +27,9 @@ export class MockModel{
 
     private mockRecord: any[] = [];
 
-    public constructor(mockRecord: any[]){
+    public constructor(mockRecord: any[], sql: string){
         this.mockRecord = mockRecord;
+        console.log(sql);
     }
 
     public exec(sql: string):any{
@@ -131,7 +132,6 @@ export class MockModel{
                     if(item[where[i][0]] < where[i][2]) return false;
                     break;
                 case "in":
-                    console.log(where);
                     if(!inArray(item[where[i][0]], where[i][2])) return false;
                     break;
                 case "like":
@@ -165,11 +165,12 @@ export class BaseModel{
     }
 
     protected exec(sql: string):Promise<any>{
-        console.log(sql);
         if(this.mock){
-            return Promise.resolve(new MockModel(this.mockData).exec(sql));
+            return Promise.resolve(new MockModel(this.mockData, sql).exec(sql));
+        }else{
+            console.log(sql);
+            return this.mysql.promise(sql);
         }
-        return this.mysql.promise(sql);
     }
 
     protected handle(modelHandle: ModelHandle):Promise<any>{
@@ -192,10 +193,10 @@ export class BaseModel{
         if(error) return Promise.reject(new Error(`${error} ERROR SQL: ${sql}`));
 
         if(this.mock){
-            return Promise.resolve(new MockModel(this.mockData).handle(modelHandle)).then((result)=>{return result});
+            return Promise.resolve(new MockModel(this.mockData, sql).handle(modelHandle)).then((result)=>{return result});
+        }else{
+            return this.exec(sql);
         }
-
-        return this.exec(sql);
     }
 
     protected count(modelHandle: ModelHandle):Promise<number>{
@@ -205,10 +206,11 @@ export class BaseModel{
         if(error) return Promise.reject(new Error(`${error} ERROR SQL: ${sql}`));
 
         if(this.mock){
-            return Promise.resolve(new MockModel(this.mockData).count(modelHandle));
+            return Promise.resolve(new MockModel(this.mockData, sql).count(modelHandle));
+        }else{
+            return this.exec(sql).then((result:any)=>{return result[0]["COUNT(*)"]});
         }
 
-        return this.exec(sql).then((result:any)=>{return result[0]["COUNT(*)"]});
     }
 
     private _v(v:any){
