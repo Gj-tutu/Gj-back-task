@@ -135,6 +135,7 @@ export class MockModel{
                     if(!inArray(item[where[i][0]], where[i][2])) return false;
                     break;
                 case "like":
+                    if(item[where[i][0]].indexOf(where[i][2]) < 0) return false;
                     break;
                 default:
                     return false;
@@ -279,6 +280,8 @@ export class BaseModel{
             }else if(typeof where[i] === "object"){
                 if(where[i][1] == "in"){
                     tmp.push(`${this._f(where[i][0])} ${where[i][1]} (${where[i][2].join(",")})`);
+                }else if(where[i][1] == "like"){
+                    tmp.push(`${this._f(where[i][0])} ${where[i][1]} (%${where[i][2]}%)`);
                 }else{
                     tmp.push(`${this._f(where[i][0])} ${where[i][1]} ${this._v(where[i][2])}`);
                 }
