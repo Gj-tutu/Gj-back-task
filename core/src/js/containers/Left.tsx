@@ -33,7 +33,9 @@ class Left extends React.Component<LeftProp, any> {
     }
 
     public componentDidMount() {
-        this.updateList();
+        if(this.props.playbook.typeList.length <= 0){
+            this.updateList();
+        }
     }
 
     public render() {
