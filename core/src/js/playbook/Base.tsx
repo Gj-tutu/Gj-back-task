@@ -7,10 +7,10 @@
 
 import * as React from "react";
 import {Playbook} from "../../../model/playbook";
-import {setting} from "../../../playbook/Config";
+import {Setting} from "../../../playbook/Base";
 
 interface PlaybookProp {
-    setting: setting;
+    setting: Setting;
     action: any;
     id?: number;
     playbook?: Playbook;

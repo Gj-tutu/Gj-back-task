@@ -12,7 +12,7 @@ import { connect } from "react-redux";
 import {playbookData} from "../reducers/PlayBook";
 import Message from "./Message";
 import Demo from "../playbook/Demo";
-import Demo1 from "../playbook/Demo1";
+import AutoDemo from "../playbook/AutoDemo";
 import Base from "../playbook/Base";
 
 interface AppProp {
@@ -67,8 +67,8 @@ class PlaybookFactory extends React.Component<AppProp, any> {
     private echo(type: string, setting:any, id?:number, playbook?:any){
         if(type == "demo"){
             return (<Demo setting={setting} id={id} playbook={playbook} action={this.props.playbookAction}/>)
-        }else if(type == "demo1"){
-            return (<Demo1 setting={setting} id={id} playbook={playbook} action={this.props.playbookAction}/>)
+        }else if(type == "AutoDemo"){
+            return (<AutoDemo setting={setting} id={id} playbook={playbook} action={this.props.playbookAction}/>)
         }else{
             return (<Base setting={setting} id={id} playbook={playbook} action={this.props.playbookAction}/>)
         }

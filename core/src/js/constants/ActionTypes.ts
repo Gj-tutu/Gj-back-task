@@ -19,3 +19,4 @@ export const UPDATE_PLAYBOOK = "updatePlaybook";
 export const UPDATE_PLAYBOOK_LIST = "updatePlaybookList";
 export const DELETE_PLAYBOOK = "deletePlaybook";
 export const SELECT_PLAYBOOK_TYPE = "selectPlaybookType";
+export const UPDATE_PLAYBOOK_TYPE = "updatePlaybookType";

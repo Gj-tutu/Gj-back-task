@@ -3,7 +3,6 @@
  */
 
 import * as ActionTypes from "../constants/ActionTypes";
-import {getTypeList, getTypeMap} from "../../../playbook/Config";
 import objectAssign = require("object-assign");
 
 export interface playbookData{
@@ -17,10 +16,10 @@ export interface playbookData{
 
 const initialValue: playbookData = {
     map: {},
-    typeMap: getTypeMap(),
-    typeList: getTypeList(),
+    typeMap: {},
+    typeList: [],
     showList: [],
-    count: {"all": 0},
+    count: {all: 0},
     type: "all"
 
 };
@@ -49,6 +48,10 @@ function PlayBook(state = initialValue, action: any) {
         case ActionTypes.SELECT_PLAYBOOK_TYPE:
             state.type = action.value;
             state.showList = filter(state.map, state.type);
+            return objectAssign({}, state);
+        case ActionTypes.UPDATE_PLAYBOOK_TYPE:
+            state.typeMap = action.value.typeMap;
+            state.typeList = action.value.typeList;
             return objectAssign({}, state);
         default:
             return state;

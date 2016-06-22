@@ -315,6 +315,13 @@ export interface ScriptResult{
     command:number;
 }
 
+export interface Setting{
+    name: string;
+    title: string;
+    auto: boolean;
+    autoTime?: number;
+}
+
 export class Base{
 
     protected app: CoreApp;
@@ -322,6 +329,7 @@ export class Base{
     protected playbookModel: PlaybookModel;
 
     protected name: string = "base";
+
     protected scripts: any = {};
 
     private scriptDispatch:ScriptDispatch;

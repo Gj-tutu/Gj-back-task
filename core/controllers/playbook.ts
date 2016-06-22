@@ -85,4 +85,10 @@ export default class Playbook extends Controller{
             });
         });
     }
+
+    public typeList(req: express.Request, res: express.Response):Promise<any>{
+        let playbookTypeMap = PlaybookFactory.getPlaybookTypeMap();
+        let playbookTypeList = PlaybookFactory.getPlaybookTypeList();
+        return Promise.resolve({typeMap: playbookTypeMap, typeList: playbookTypeList});
+    }
 }

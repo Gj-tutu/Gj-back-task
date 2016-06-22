@@ -6,11 +6,15 @@ import {Base, Script, ScriptResult} from "./Base";
 import CoreApp from "../App";
 import {Playbook} from "../model/playbook";
 import * as Constant from "../Constant";
+import {Setting} from "./Base";
+
+export const setting: Setting = {name: "autoDemo", title: "自动Demo", auto: true, autoTime: 3600};
 
 export default class Demo extends Base{
 
-    protected name: string = "demo";
     protected scripts: any = {name: "test"};
+
+    protected name:string = setting.name;
 
     constructor(app:CoreApp, playbook?: Playbook){
         super(app, playbook);

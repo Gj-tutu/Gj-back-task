@@ -3,21 +3,21 @@
  */
 
 import App from "../../app/App";
-import {getTypeMap, getTypeList} from "./Config";
 import {Base as BasePlayBook} from "./Base";
 
 export class Factory{
     private static playbookTypeListMap: any = null;
     private static playbookTypeSettingMap: any = null;
-    private static playbookTypeList: string[] = [];
+    private static playbookTypeList: string[] = ['demo', 'autoDemo'];
 
     private static findPlaybook(){
         Factory.playbookTypeListMap = {};
-        Factory.playbookTypeSettingMap = getTypeMap();
-        Factory.playbookTypeList = getTypeList();
+        Factory.playbookTypeSettingMap = {};
         for(let i in Factory.playbookTypeList){
             let typeName = Factory.playbookTypeList[i].replace(/(\w)/,function(v){return v.toUpperCase()});
-            Factory.playbookTypeListMap[Factory.playbookTypeList[i]] = require(`./${typeName}`).default;
+            let playbookType = require(`./${typeName}`);
+            Factory.playbookTypeListMap[Factory.playbookTypeList[i]] = playbookType.default;
+            Factory.playbookTypeSettingMap[i] = playbookType.setting;
         }
     }
 
@@ -29,7 +29,7 @@ export class Factory{
         return Factory.playbookTypeListMap[typeName];
     }
 
-    public static getPlaybookSettingMap(){
+    public static getPlaybookTypeMap(){
         if(!Factory.playbookTypeSettingMap){
             Factory.findPlaybook();
         }

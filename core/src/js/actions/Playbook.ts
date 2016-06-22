@@ -42,6 +42,14 @@ export function del(id: number) {
             });
     };
 }
+export function typeList() {
+    return function(dispatch: Redux.Dispatch, getState?: () => {}){
+        ajaxHandle("get", "/api/playbook/typeList", {}, dispatch)
+            .then((result: any)=>{
+                dispatch({type: ActionTypes.UPDATE_PLAYBOOK_TYPE, value: result});
+            });
+    };
+}
 
 export function selectType(type: string){
     return {type: ActionTypes.SELECT_PLAYBOOK_TYPE, value: type}

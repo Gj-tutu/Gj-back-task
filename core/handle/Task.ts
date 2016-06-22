@@ -91,12 +91,12 @@ export default class Task {
     }
 
     private handleAutoPlaybook(){
-        let settingMap = PlaybookFactory.getPlaybookSettingMap();
+        let typeMap = PlaybookFactory.getPlaybookTypeMap();
         let p: Promise<any>[]= [];
         let playbookModel = new PlaybookModel(this.app);
-        for(let i in settingMap){
-            if(settingMap[i].auto){
-                p.push(playbookModel.getTypeLastPlaybook(settingMap[i].name, true));
+        for(let i in typeMap){
+            if(typeMap[i].auto){
+                p.push(playbookModel.getTypeLastPlaybook(i, true));
             }
         }
         return Promise.all(p).then((playbookList:Playbook[])=>{
@@ -104,10 +104,10 @@ export default class Task {
             for(let i in playbookList){
                 typeList[playbookList[i].type] = playbookList[i];
             }
-            for(let i in settingMap){
-                if(settingMap[i].auto){
+            for(let i in typeMap){
+                if(typeMap[i].auto){
                     if(typeList[i]){
-                        if(getTime() - typeList[i].updateTime > settingMap[i].autoTime){
+                        if(getTime() - typeList[i].updateTime > typeMap[i].autoTime){
                             this.events.emit("add", Constant.TASK_TYPE_ADDPLAYBOOK, i);
                         }
                     }else{
