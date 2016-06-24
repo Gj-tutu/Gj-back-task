@@ -39,11 +39,10 @@ class Content extends React.Component<ContentProp, any> {
 
     private updateList(){
         this.props.playbookAction.list(100, 0);
-        this._updateTime = setTimeout(this.updateList.bind(this), 1000*30);
     }
 
     public componentDidMount() {
-        this.updateList();
+        this._updateTime = setTimeout(this.updateList.bind(this), 1000*30);
         this._component = true;
     }
 
@@ -72,8 +71,8 @@ class Content extends React.Component<ContentProp, any> {
         }
         return (
             <div style={style}>
-                {this.props.playbook.type != "all" ?
-                <RaisedButton label="添加" primary={true} onTouchTap={this.__add.bind(this)} /> : ""}
+                {this.props.playbook.type != "all" ? this.props.playbook.typeMap[this.props.playbook.type]["auto"] ? "" :
+                <RaisedButton label="添加" fullWidth={true} primary={true} onTouchTap={this.__add.bind(this)} /> : ""}
                 <Dialog
                     modal={false}
                     open={dialogOpen}

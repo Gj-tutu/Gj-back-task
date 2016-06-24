@@ -67,7 +67,7 @@ class PlaybookFactory extends React.Component<AppProp, any> {
     private echo(type: string, setting:any, id?:number, playbook?:any){
         if(type == "demo"){
             return (<Demo setting={setting} id={id} playbook={playbook} action={this.props.playbookAction}/>)
-        }else if(type == "AutoDemo"){
+        }else if(type == "autoDemo"){
             return (<AutoDemo setting={setting} id={id} playbook={playbook} action={this.props.playbookAction}/>)
         }else{
             return (<Base setting={setting} id={id} playbook={playbook} action={this.props.playbookAction}/>)

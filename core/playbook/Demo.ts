@@ -8,7 +8,7 @@ import {Playbook} from "../model/playbook";
 import * as Constant from "../Constant";
 import {Setting} from "./Base";
 
-export const setting: Setting = {name: "autoDemo", title: "自动Demo", auto: true, autoTime: 3600};
+export const setting: Setting = {name: "demo", title: "demo", auto: false};
 
 export default class Demo extends Base{
 

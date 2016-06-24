@@ -15,9 +15,8 @@ export class Factory{
         Factory.playbookTypeSettingMap = {};
         for(let i in Factory.playbookTypeList){
             let typeName = Factory.playbookTypeList[i].replace(/(\w)/,function(v){return v.toUpperCase()});
-            let playbookType = require(`./${typeName}`);
-            Factory.playbookTypeListMap[Factory.playbookTypeList[i]] = playbookType.default;
-            Factory.playbookTypeSettingMap[i] = playbookType.setting;
+            Factory.playbookTypeListMap[Factory.playbookTypeList[i]] = require(`./${typeName}`).default;
+            Factory.playbookTypeSettingMap[Factory.playbookTypeList[i]] = require(`./${typeName}`).setting;
         }
     }
 
