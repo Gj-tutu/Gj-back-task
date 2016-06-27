@@ -69,15 +69,10 @@ export function apiMiddleware({ dispatch, getState }) {
             dispatch(action.before);
             action.ajax().then((result:any)=>{
                 result = action.handle(result);
-                if(result instanceof Array){
-                    for(let i in result){
-                        dispatch(result[i]);
-                    }
-                }else{
-                    dispatch(result);
-                }
-                dispatch(action.after);
+                return result;
             }).catch((result:any)=>{
+                return result;
+            }).then((result:any)=>{
                 if(result instanceof Array){
                     for(let i in result){
                         dispatch(result[i]);
