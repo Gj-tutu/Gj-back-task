@@ -62,7 +62,9 @@ export class Api{
 
 export function apiMiddleware({ dispatch, getState }) {
     return (next: any) => (action: any) =>{
-        console.log(action);
+        if(window.__DEV__){
+            console.log(action);
+        }
         if(action instanceof Api){
             dispatch(action.before);
             action.ajax().then((result:any)=>{
