@@ -86,9 +86,24 @@ export default class Playbook extends Controller{
         });
     }
 
-    public typeList(req: express.Request, res: express.Response):Promise<any>{
-        let playbookTypeMap = PlaybookFactory.getPlaybookTypeMap();
-        let playbookTypeList = PlaybookFactory.getPlaybookTypeList();
-        return Promise.resolve({typeMap: playbookTypeMap, typeList: playbookTypeList});
+    public init(req: express.Request, res: express.Response):Promise<any>{
+        let playbookModel = new PlaybookModel(this.app);
+        let list:any[] = [];
+        list.push(playbookModel.getList([], 0, 100).then((playbookRecordList:PlaybookRecord[])=>{
+            let result:any[] = [];
+            for(let i in playbookRecordList){
+                result.push(playbookRecordList[i].toJson())
+            }
+            return result;
+        }));
+        list.push(playbookModel.getCount([]));
+        return Promise.all(list).then((results:any[])=>{
+            let result:any = {};
+            result["list"] = results[0];
+            result["count"] = results[1];
+            result["typeMap"] = PlaybookFactory.getPlaybookTypeMap();
+            result["typeList"] = PlaybookFactory.getPlaybookTypeList();
+            return result;
+        });
     }
 }

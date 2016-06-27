@@ -6,34 +6,23 @@
 
 import * as ActionTypes from "../constants/ActionTypes";
 import * as Constant from "../../../Constant";
-import {ajaxHandle, router} from "./Main";
+import {router} from "./Main";
+import {Api} from "../middleware/Api";
 
 export function login(email: string, password: string) {
-    return function(dispatch: Redux.Dispatch, getState?: () => {}){
-        ajaxHandle("post", "/api/login", {email: email, password: password}, dispatch)
-            .then((result: any)=>{
-                    dispatch({type: ActionTypes.LOGIN, value: {email: result.email}});
-                    dispatch(router("/"));
-            });
-    };
+    return new Api("post", "/api/login", {email: email, password: password}).do((result: any)=>{
+        return [{type: ActionTypes.LOGIN, value: {email: result.email}}, router("/")];
+    });
 }
 
 export function register(email: string, password: string) {
-    return function(dispatch: Redux.Dispatch, getState?: () => {}){
-        ajaxHandle("post", "/api/register", {email: email, password: password}, dispatch)
-            .then((result: any)=>{
-                dispatch({type: ActionTypes.REGISTER, value: {email: result.email}});
-                dispatch(router("/"));
-            });
-    };
+    return new Api("post", "/api/register", {email: email, password: password}).do((result: any)=>{
+        return [{type: ActionTypes.REGISTER, value: {email: result.email}}, router("/")];
+    });
 }
 
 export function loginOut(){
-    return function(dispatch: Redux.Dispatch, getState?: () => {}){
-        ajaxHandle("post", "/api/loginOut", {}, dispatch)
-            .then(()=>{
-                dispatch({ type: ActionTypes.LOGINOUT });
-                dispatch(router("/login"));
-            });
-    };
+    return new Api("post", "/api/loginOut", {}).do((result: any)=>{
+        return [{ type: ActionTypes.LOGINOUT }, router("/login")];
+    });
 }

@@ -16,6 +16,7 @@ import MainStore from "../store/Main";
 import DevTools from "./DevTools";
 import { IndexRoute, Route, Router, browserHistory } from 'react-router';
 import { syncHistoryWithStore, routerMiddleware } from 'react-router-redux';
+import { apiMiddleware } from '../middleware/Api';
 
 //路由页面
 import App from "./App";
@@ -40,7 +41,7 @@ class Container extends React.Component<ContainerProp, any> {
     }
 
     private getStore(){
-        return MainStore(this.props.data, [routerMiddleware(browserHistory)]);
+        return MainStore(this.props.data, [apiMiddleware, routerMiddleware(browserHistory)]);
     }
 
     private getHistory(store: any){

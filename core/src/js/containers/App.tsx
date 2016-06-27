@@ -39,6 +39,8 @@ class App extends React.Component<AppProp, any> {
     private init(){
         if(!this.props.user.email){
             this.props.mainAction.router("/login");
+        }else{
+            this.props.playbookAction.init();
         }
     }
 

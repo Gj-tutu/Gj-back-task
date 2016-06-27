@@ -37,8 +37,8 @@ export default function routerHandle(app:CoreApp):express.Router{
     router.post("/api/loginOut", user.handle([], user.loginOut));
 
     //playbook 查看 状态,列表
+    router.get("/api/playbook/init", playbook.handle([], playbook.init));
     router.get("/api/playbook/get/:id", playbook.handle([{name:"id", param:true}], playbook.get));
-    router.get("/api/playbook/typeList", playbook.handle([], playbook.typeList));
     router.get("/api/playbook/list", playbook.handle([{name:"num", query:true}, {name:"start", query:true}, {name:"type", query:true}, {name:"count", query:true}], playbook.list));
 
     //playbook 操作 添加,删除,重启

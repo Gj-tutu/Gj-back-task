@@ -28,16 +28,6 @@ class Left extends React.Component<LeftProp, any> {
         super(props);
     }
 
-    private updateList(){
-        this.props.playbookAction.typeList();
-    }
-
-    public componentDidMount() {
-        if(this.props.playbook.typeList.length <= 0){
-            this.updateList();
-        }
-    }
-
     public render() {
         let open = true;
         let style = {zIndex: 4, paddingTop: 64};

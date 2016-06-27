@@ -5,50 +5,35 @@
 /// <reference path="../../../../libs/ts/react-router-redux.d.ts" />
 
 import * as ActionTypes from "../constants/ActionTypes";
-import {ajaxHandle, router} from "./Main";
+import {Api} from "../middleware/Api";
+import {router} from "./Main";
 
 export function get(id: number) {
-    return function(dispatch: Redux.Dispatch, getState?: () => {}){
-        ajaxHandle("get", `/api/playbook/get/${id}`, {}, dispatch)
-            .then((result: any)=>{
-                dispatch({type: ActionTypes.UPDATE_PLAYBOOK, value: result});
-            });
-    };
+    return new Api("get", `/api/playbook/get/${id}`, {}).do((result: any)=>{
+        return {type: ActionTypes.UPDATE_PLAYBOOK, value: result};
+    });
 }
 export function list(num: number, start: number, type: string = "all") {
-    return function(dispatch: Redux.Dispatch, getState?: () => {}){
-        let queryData = {num: num, start: start, type: type, count: true};
-        ajaxHandle("get", "/api/playbook/list", {num: num, start: start, type: type, count: true}, dispatch)
-            .then((result: any)=>{
-                result["type"] = type;
-                dispatch({type: ActionTypes.UPDATE_PLAYBOOK_LIST, value: result});
-            });
-    };
+    return new Api("get", "/api/playbook/list", {num: num, start: start, type: type, count: true}).do((result: any)=>{
+            result["type"] = type;
+            return {type: ActionTypes.UPDATE_PLAYBOOK_LIST, value: result};
+        });
 }
 export function add(type: string, param: any) {
-    return function(dispatch: Redux.Dispatch, getState?: () => {}){
-        ajaxHandle("post", "/api/playbook/add", {type: type, param: JSON.stringify(param)}, dispatch)
-            .then((result: any)=>{
-                dispatch({type: ActionTypes.ADD_PLAYBOOK, value: result});
-                dispatch(router(`/checkPlaybook/${result.id}`));
-            });
-    };
+    return new Api("post", "/api/playbook/add", {type: type, param: JSON.stringify(param)}).do((result: any)=>{
+        return[{type: ActionTypes.ADD_PLAYBOOK, value: result}, router(`/checkPlaybook/${result.id}`)];
+    });
 }
 export function del(id: number) {
-    return function(dispatch: Redux.Dispatch, getState?: () => {}){
-        ajaxHandle("post", "/api/playbook/delete", {id: id}, dispatch)
-            .then((result: any)=>{
-                dispatch({type: ActionTypes.DELETE_PLAYBOOK, value: result});
-            });
-    };
+    return new Api("post", "/api/playbook/delete", {id: id}).do((result: any)=>{
+        return {type: ActionTypes.DELETE_PLAYBOOK, value: result};
+    });
 }
-export function typeList() {
-    return function(dispatch: Redux.Dispatch, getState?: () => {}){
-        ajaxHandle("get", "/api/playbook/typeList", {}, dispatch)
-            .then((result: any)=>{
-                dispatch({type: ActionTypes.UPDATE_PLAYBOOK_TYPE, value: result});
-            });
-    };
+export function init() {
+    return new Api("get", "/api/playbook/init", {}).do((result: any)=>{
+        result["type"] = "all";
+        return [{type: ActionTypes.UPDATE_PLAYBOOK_LIST, value: result}, {type: ActionTypes.UPDATE_PLAYBOOK_TYPE, value: result}];
+    });
 }
 
 export function selectType(type: string){
