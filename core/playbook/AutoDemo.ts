@@ -18,11 +18,11 @@ export default class AutoDemo extends Base{
 
     constructor(app:CoreApp, playbook?: Playbook){
         super(app, playbook);
-        this.setHandleFun(AutoDemo.demoHandle);
+        this.setHandleFun(this.demoHandle);
         this.init();
     }
 
-    private static demoHandle(script:Script):Promise<ScriptResult>{
+    private demoHandle(script:Script):Promise<ScriptResult>{
         let result:ScriptResult = {
             resultState: Constant.NORMAL,
             command: Constant.SCRIPT_NEXT_COMMAND,

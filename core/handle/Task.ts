@@ -66,6 +66,7 @@ export default class Task {
                         this.events.emit("next");
                     })
                     .catch((error: Error)=>{
+                        console.log(error);
                         this.events.emit("next");
                     });
             }else if(task.type == Constant.TASK_TYPE_AUTOPLAYBOOK){
@@ -74,6 +75,7 @@ export default class Task {
                         this.events.emit("next");
                     })
                     .catch((error: Error)=>{
+                        console.log(error);
                         this.events.emit("next");
                     });
             }else if(task.type == Constant.TASK_TYPE_ADDPLAYBOOK){
@@ -82,6 +84,7 @@ export default class Task {
                         this.events.emit("next");
                     })
                     .catch((error: Error)=>{
+                        console.log(error);
                         this.events.emit("next");
                     });
             }

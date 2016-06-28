@@ -8,6 +8,7 @@
 import * as React from "react";
 import Base from "./Base";
 import FlatButton = require('material-ui/lib/flat-button');
+import TextField = require('material-ui/lib/text-field');
 import * as Constant from "../../../Constant";
 
 class Demo extends Base {
@@ -20,13 +21,18 @@ class Demo extends Base {
         if(this.props.id){
             return (
                 <div>
-                    {JSON.stringify(this.props.playbook.result)}
+                    {this.props.playbook.result["test"] ? this.props.playbook.result["test"] : "执行中"}
                 </div>
             );
         }else{
             return (
                 <div>
-                    {this.props.setting.title}
+                    <TextField
+                        hintText="30"
+                        floatingLabelText="脚本执行时间"
+                        type="text"
+                        onChange={this.__param.bind(this)}
+                    />
                     <FlatButton label="添加" primary={true}
                                 onTouchTap={this.__add.bind(this)}/>
                 </div>
@@ -34,8 +40,12 @@ class Demo extends Base {
         }
     }
 
+    private __param(event: any){
+        this.setState({waitTime: event.target.value})
+    }
+
     private __add(){
-        this.props.action.add(this.props.setting.name, {value: this.props.setting.name});
+        this.props.action.add(this.props.setting.name, {waitTime: this.state.waitTime});
     }
 }
 

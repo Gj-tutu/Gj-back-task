@@ -42,7 +42,7 @@ class Content extends React.Component<ContentProp, any> {
     }
 
     public componentDidMount() {
-        this._updateTime = setTimeout(this.updateList.bind(this), 1000*30);
+        this._updateTime = setInterval(this.updateList.bind(this), 1000*30);
         this._component = true;
     }
 

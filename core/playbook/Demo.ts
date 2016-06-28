@@ -7,6 +7,7 @@ import CoreApp from "../App";
 import {Playbook} from "../model/playbook";
 import * as Constant from "../Constant";
 import {Setting} from "./Base";
+import {formatDate} from "../../app/tools/Util";
 
 export const setting: Setting = {name: "demo", title: "demo", auto: false};
 
@@ -18,11 +19,11 @@ export default class Demo extends Base{
 
     constructor(app:CoreApp, playbook?: Playbook){
         super(app, playbook);
-        this.setHandleFun(Demo.demoHandle);
+        this.setHandleFun(this.demoHandle);
         this.init();
     }
 
-    private static demoHandle(script:Script):Promise<ScriptResult>{
+    private demoHandle(script: Script):Promise<ScriptResult>{
         let result:ScriptResult = {
             resultState: Constant.NORMAL,
             command: Constant.SCRIPT_NEXT_COMMAND,
@@ -30,10 +31,12 @@ export default class Demo extends Base{
         };
         return new Promise((resolve : (value?: any) => void, reject: (error?: any) => void)=>{
             if(script.getName() == "test"){
+                let startTime = formatDate(new Date(), "yyyy-MM-dd hh:mm:ss");
                 setTimeout(()=>{
-                    result.data = "脚本执行成功";
+                    let endTime = formatDate(new Date(), "yyyy-MM-dd hh:mm:ss");
+                    result.data = `脚本开始时间:${startTime}, 脚本结束时间:${endTime}.`;
                     resolve(result);
-                }, 1000*30);
+                }, this.getParam("waitTime")*1000);
             }else{
                 reject(new Error("脚本为空"));
             }

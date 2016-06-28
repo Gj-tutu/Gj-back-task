@@ -348,12 +348,15 @@ export class Base{
 
         }
         this.playbookModel = new PlaybookModel(app);
-        this.setHandleFun(Base.doHandle);
     }
 
-    public setParam(param:any){
+    public setParam(param: any){
         this.playbook.param = param;
         return this;
+    }
+
+    public getParam(name: string){
+        return this.playbook.param[name] ? this.playbook.param[name] : null;
     }
 
     public setAuto(auto: boolean){
@@ -414,7 +417,7 @@ export class Base{
                 }
             })
             .catch((error:Error)=>{
-                this.addResult(script.getName(), error);
+                this.addResult(script.getName(), error.message);
                 this.scriptDispatch.scriptError(script.getName(), error);
             });
     }
