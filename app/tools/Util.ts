@@ -32,3 +32,26 @@ export function formatDate(date: Date, fmt: string):string { //author: meizz
         if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
     return fmt;
 }
+
+export function dateDetail(date: Date){
+    return [date.getMinutes(), date.getHours(), date.getDate(), date.getMonth(), date.getDay()]
+}
+
+export function isNowDate(nowDate: any[], date: any[]){
+    for(let i=0;i<5;i++){
+        if(date[i] == "*"){
+            continue
+        }
+        if(date[i] == nowDate[i]){
+            continue
+        }
+        if(date[i].indexOf("/") > 0){
+            let tmp: any[] = date[i].split("/");
+            if(tmp[0] == "*" && nowDate[i] % tmp[1] == 0){
+                continue
+            }
+        }
+        return false
+    }
+    return true
+}

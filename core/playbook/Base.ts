@@ -319,7 +319,7 @@ export interface Setting{
     name: string;
     title: string;
     auto: boolean;
-    autoTime?: number;
+    autoTime?: any[];
 }
 
 export class Base{

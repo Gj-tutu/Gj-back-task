@@ -11,6 +11,8 @@ import {Playbook, PlaybookModel} from "../model/playbook";
 import {Logger} from "bunyan";
 import {getTime} from "../../app/tools/Util";
 import {Factory as PlaybookFactory} from "../playbook/Factory";
+import {dateDetail} from "../../app/tools/Util";
+import {isNowDate} from "../../app/tools/Util";
 
 interface TaskData{
     type: number;
@@ -60,27 +62,16 @@ export default class Task {
         if(this.taskList.length > 0){
             this.ing = true;
             let task: TaskData = this.taskList.shift();
+            let handle: Promise<any> = null;
             if (task.type == Constant.TASK_TYPE_PLAYBOOK){
-                this.handlePlaybookTask(task.data)
-                    .then((playbook: Playbook)=>{
-                        this.events.emit("next");
-                    })
-                    .catch((error: Error)=>{
-                        console.log(error);
-                        this.events.emit("next");
-                    });
+                handle = this.handlePlaybookTask(task.data);
             }else if(task.type == Constant.TASK_TYPE_AUTOPLAYBOOK){
-                this.handleAutoPlaybook()
-                    .then(()=>{
-                        this.events.emit("next");
-                    })
-                    .catch((error: Error)=>{
-                        console.log(error);
-                        this.events.emit("next");
-                    });
+                handle = this.handleAutoPlaybook();
             }else if(task.type == Constant.TASK_TYPE_ADDPLAYBOOK){
-                this.handleAddPlaybook(task.data)
-                    .then((playbook: Playbook)=>{
+                handle = this.handleAddPlaybook(task.data);
+            }
+            if(handle){
+                handle.then((data: any)=>{
                         this.events.emit("next");
                     })
                     .catch((error: Error)=>{
@@ -94,32 +85,19 @@ export default class Task {
     }
 
     private handleAutoPlaybook(){
+        let nowDate = new Date();
+        let nowDateDetail = dateDetail(nowDate);
         let typeMap = PlaybookFactory.getPlaybookTypeMap();
-        let p: Promise<any>[]= [];
-        let playbookModel = new PlaybookModel(this.app);
         for(let i in typeMap){
             if(typeMap[i].auto){
-                p.push(playbookModel.getTypeLastPlaybook(i, true));
-            }
-        }
-        return Promise.all(p).then((playbookList:Playbook[])=>{
-            let typeList: any = {};
-            for(let i in playbookList){
-                typeList[playbookList[i].type] = playbookList[i];
-            }
-            for(let i in typeMap){
-                if(typeMap[i].auto){
-                    if(typeList[i]){
-                        if(getTime() - typeList[i].updateTime > typeMap[i].autoTime){
-                            this.events.emit("add", Constant.TASK_TYPE_ADDPLAYBOOK, i);
-                        }
-                    }else{
-                        this.events.emit("add", Constant.TASK_TYPE_ADDPLAYBOOK, i);
-                    }
+                if(isNowDate(nowDateDetail, typeMap[i]["autoTime"])){
+                    this.events.emit("add", Constant.TASK_TYPE_ADDPLAYBOOK, i);
                 }
             }
-            this.events.emit("addTime", getTime()+60, Constant.TASK_TYPE_AUTOPLAYBOOK);
-        });
+        }
+
+        this.events.emit("addTime", (nowDate.getTime()+(60*1000))/1000, Constant.TASK_TYPE_AUTOPLAYBOOK);
+        return Promise.resolve(true);
     }
 
     private handleAddPlaybook(type: string):Promise<Playbook>{
