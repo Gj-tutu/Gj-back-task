@@ -9,7 +9,14 @@ var gutil = require("gulp-util");
 var config = require("./app/config");
 var clean = require('gulp-clean');
 var shell = require('gulp-shell');
-var __DEV__ = config.DEBUG;
+
+var __DEV__ = false;
+for (var i = 1; i<process.argv.length; i++) {
+    var arg = process.argv[i];
+    if (arg === "-d") {
+        __DEV__ = true;
+    }
+}
 
 //编译ts文件
 gulp.task('ts', shell.task([path.join(__dirname, "./node_modules/typescript/bin/tsc")]));

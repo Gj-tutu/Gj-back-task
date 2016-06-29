@@ -2,6 +2,7 @@
 > mock模式完成,可以直接通过命令查看展示
 
 + 初始化
+> npm install
 > npm run init
 
 + 启动mock
@@ -15,6 +16,5 @@
 + 前端页面实现用react结合material-ui进行展示和操作
 
 ## 后续开发
-+ 修改启动命令添加 -d -m 参数启动方式
 + 添加model关联方式
 + util工具添加至基础类型扩展

@@ -13,7 +13,7 @@ function daemon() {
     let new_argv: string[] = [];
     for (let i = 1; i<process.argv.length; i++) {
         let arg = process.argv[i];
-        if (arg !== "-d" && arg !== "daemon") {
+        if (arg !== "-D" && arg !== "daemon") {
             new_argv.push(process.argv[i]);
         }
     }
@@ -30,6 +30,33 @@ function daemon() {
         console.log("exit");
     });
 }
+
+function init(dev:boolean, callBack:()=>void){
+    let new_argv: string[] = [];
+    new_argv.push("init");
+    if (dev) new_argv.push("-d");
+    let spawn = require("child_process").spawn;
+    let init = spawn("./node_modules/gulp/bin/gulp.js", new_argv);
+    init.stdout.on('data', (data:string) => {
+        console.log(data.toString());
+    });
+
+    init.stderr.on('data', (data:string) => {
+        console.log(data.toString());
+    });
+    init.on('exit', (code:string, signal: string) => {
+        if(code != "0"){
+            init.kill(signal);
+        }else{
+            if(dev){
+                let webpack_server = spawn("./node_modules/gulp/bin/gulp.js", ["webpack-dev-server"]);
+                console.log("webpack_server start");
+            }
+            callBack();
+        }
+    });
+}
+
 /* 基本设置 */
 program
     .version(fs.readFileSync("VERSION").toString());
@@ -37,16 +64,30 @@ program
 /* 启动Data服务 */
 program
     .command("start <instance>")
-    .description("start service [data|core|all]")
-    .option("-d, --daemon", "run in backend")
+    .description("start service")
+    .option("-D --daemon", "run in backend")
+    .option("-d --dev", "dev model")
+    .option("-m --mock", "mock model")
     .action(function(instance: any, options: any){
-        if (options.d) {
+        if (options.daemon) {
             return daemon();
         }
-        if (instance === "core" || instance === "all") {
-            let core: CoreApp = new CoreApp;
-            core.start();
+        let __DEV__ = false;
+        let __MOCK__ = false;
+
+        if(options.dev){
+            __DEV__ = true;
         }
+        if(options.mock){
+            __MOCK__ = true;
+        }
+        if(instance !== "core") return;
+        init(__DEV__, ()=>{
+            let core: CoreApp = new CoreApp;
+            if(__DEV__) core.openDev();
+            if(__MOCK__) core.openMock();
+            core.start();
+        })
     }).on("--help", function(){
     console.log("  Examples:");
     console.log("");

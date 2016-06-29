@@ -20,6 +20,9 @@ class App {
     public logger: any;
     public config: any;
 
+    public __DEV__: boolean = false;
+    public __MOCK__: boolean = false;
+
     constructor() {
         this.express = express();
         this.config = config;
@@ -51,6 +54,20 @@ class App {
         this.express.use(loggerMiddle(this.logger));
         this.errorHandle();
         this.closeHandle();
+    }
+
+    /**
+     * 打开开发模式
+     */
+    public openDev(){
+        this.__DEV__ = true;
+    }
+
+    /**
+     * 打开mock模式
+     */
+    public openMock(){
+        this.__MOCK__ = true;
     }
 
     /**

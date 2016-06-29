@@ -51,17 +51,14 @@
     "redux-devtools-dock-monitor": "^1.0.1",
     "redux-devtools-log-monitor": "^1.0.1",
     "redux-thunk": "^1.0.3",
-    "supervisor": "^0.9.1",
     "tslint": "^3.2.1",
     "webpack-dev-server": "^1.14.0"
   },
   "scripts": {
-    "init": "gulp init",
+    "init": "tsd install & chmod -R +x typings",
     "tsd-install": "tsd install --save ",
-    "tsd": "tsd install && chmod -R +x typings",
-    "start": "node index.js start",
-    "mock": "node mock.js",
-    "dev": "supervisor dev.js & gulp webpack-dev-server",
+    "dev": "node index.js start core -d -m",
+    "mock": "node index.js start core -m",
     "test": "mocha --recursive --bail ",
     "test-cov": "node ./node_modules/istanbul-harmony/lib/cli.js cover ./node_modules/mocha/bin/_mocha --recursive test/ --bail"
   },

@@ -166,7 +166,7 @@ export class BaseModel{
     }
 
     protected exec(sql: string):Promise<any>{
-        if(this.mock){
+        if(this.app.__MOCK__){
             return Promise.resolve(new MockModel(this.mockData, sql).exec(sql));
         }else{
             console.log(sql);
@@ -193,7 +193,7 @@ export class BaseModel{
         }
         if(error) return Promise.reject(new Error(`${error} ERROR SQL: ${sql}`));
 
-        if(this.mock){
+        if(this.app.__MOCK__){
             return Promise.resolve(new MockModel(this.mockData, sql).handle(modelHandle)).then((result)=>{return result});
         }else{
             return this.exec(sql);
@@ -206,7 +206,7 @@ export class BaseModel{
         let sql = `SELECT COUNT(*) FROM ${modelHandle.tableName} WHERE ${this._where(modelHandle.where)}`;
         if(error) return Promise.reject(new Error(`${error} ERROR SQL: ${sql}`));
 
-        if(this.mock){
+        if(this.app.__MOCK__){
             return Promise.resolve(new MockModel(this.mockData, sql).count(modelHandle));
         }else{
             return this.exec(sql).then((result:any)=>{return result[0]["COUNT(*)"]});
