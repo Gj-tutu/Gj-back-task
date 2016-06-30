@@ -9,10 +9,8 @@ import {EventEmitter} from "events";
 import {Base as BasePlaybook} from "../playbook/Base";
 import {Playbook, PlaybookModel} from "../model/playbook";
 import {Logger} from "bunyan";
-import {getTime} from "../../app/tools/Util";
 import {Factory as PlaybookFactory} from "../playbook/Factory";
-import {dateDetail} from "../../app/tools/Util";
-import {isNowDate} from "../../app/tools/Util";
+import {Time} from "../../app/tools/Time";
 
 interface TaskData{
     type: number;
@@ -85,18 +83,17 @@ export default class Task {
     }
 
     private handleAutoPlaybook(){
-        let nowDate = new Date();
-        let nowDateDetail = dateDetail(nowDate);
+        let time = new Time();
         let typeMap = PlaybookFactory.getPlaybookTypeMap();
         for(let i in typeMap){
             if(typeMap[i].auto){
-                if(isNowDate(nowDateDetail, typeMap[i]["autoTime"])){
+                if(time.judge(typeMap[i]["autoTime"])){
                     this.events.emit("add", Constant.TASK_TYPE_ADDPLAYBOOK, i);
                 }
             }
         }
 
-        this.events.emit("addTime", (nowDate.getTime()+(60*1000))/1000, Constant.TASK_TYPE_AUTOPLAYBOOK);
+        this.events.emit("addTime", time.getTime(), Constant.TASK_TYPE_AUTOPLAYBOOK);
         return Promise.resolve(true);
     }
 
@@ -140,12 +137,12 @@ export default class Task {
     }
 
     private addTime(time: number, type: number, data: any){
-        let nowTime = getTime();
+        let nowTime = new Time().getTime();
         let _time = time - nowTime;
         if(_time > 0){
             setTimeout(()=>{
                 this.events.emit("add", type, data);
-            }, _time*1000);
+            }, _time);
         }else{
             this.events.emit("add", type ,data);
         }

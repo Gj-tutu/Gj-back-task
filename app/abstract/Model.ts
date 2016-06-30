@@ -5,6 +5,7 @@ import {Mysql} from "../../app/tools/Mysql";
 import App from "../../app/App";
 import {BaseModel, ModelHandle} from "./BaseModel";
 import {MODEL_ORDER_DESC} from "./BaseModel";
+import {Time} from "../tools/Time";
 
 export class Record{
 
@@ -86,7 +87,7 @@ export class Model extends BaseModel{
 
     public delByKey(key: number):Promise<any>{
         let data:any = {};
-        data[this.deleteTime] = BaseModel.getTime();
+        data[this.deleteTime] = new Time().getTimeStamp();
         return this.updateByKey(key, data);
     }
 
@@ -114,7 +115,7 @@ export class Model extends BaseModel{
     }
 
     public del(data: Record):Promise<Record>{
-        data.set(this.deleteTime, BaseModel.getTime());
+        data.set(this.deleteTime, new Time().getTimeStamp());
         return this.update(data);
     }
 
@@ -185,7 +186,7 @@ export class Model extends BaseModel{
     }
 
     public update(data: Record):Promise<Record>{
-        data.set(this.updateTime, BaseModel.getTime());
+        data.set(this.updateTime, new Time().getTimeStamp());
         let keys: any[] = this.field;
         let values: any = {};
         for(let i=0;i<keys.length;i++){
@@ -211,7 +212,7 @@ export class Model extends BaseModel{
     }
 
     public add(data: Record):Promise<Record>{
-        data.set(this.createTime, BaseModel.getTime());
+        data.set(this.createTime, new Time().getTimeStamp());
         let keys: any[] = this.field;
         let values: any = {};
         for(let i=0;i<keys.length;i++){

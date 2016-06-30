@@ -7,7 +7,7 @@ import CoreApp from "../App";
 import {Playbook} from "../model/playbook";
 import * as Constant from "../Constant";
 import {Setting} from "./Base";
-import {formatDate} from "../../app/tools/Util";
+import {Time} from "../../app/tools/Time";
 
 export const setting: Setting = {name: "demo", title: "demo", auto: false};
 
@@ -31,9 +31,9 @@ export default class Demo extends Base{
         };
         return new Promise((resolve : (value?: any) => void, reject: (error?: any) => void)=>{
             if(script.getName() == "test"){
-                let startTime = formatDate(new Date(), "yyyy-MM-dd hh:mm:ss");
+                let startTime = new Time().foramt("yyyy-MM-dd hh:mm:ss");
                 setTimeout(()=>{
-                    let endTime = formatDate(new Date(), "yyyy-MM-dd hh:mm:ss");
+                    let endTime = new Time().foramt("yyyy-MM-dd hh:mm:ss");
                     result.data = `脚本开始时间:${startTime}, 脚本结束时间:${endTime}.`;
                     resolve(result);
                 }, this.getParam("waitTime")*1000);

@@ -159,12 +159,6 @@ export class BaseModel{
         this.mock = process.env.DATE_MODE = "mock" ? true : false;
     }
 
-    public static getTime():number{
-        let _time: number = new Date().getTime();
-        _time = Math.ceil(_time/1000);
-        return _time;
-    }
-
     protected exec(sql: string):Promise<any>{
         if(this.app.__MOCK__){
             return Promise.resolve(new MockModel(this.mockData, sql).exec(sql));
