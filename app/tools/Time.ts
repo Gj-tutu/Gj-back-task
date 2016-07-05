@@ -41,20 +41,38 @@ export class Time extends Date{
         let _date = this.getDateDetail();
         let __date:any[] = date.split(" ");
         for(let i=0;i<5;i++){
-            if(__date[i] == "*"){
-                continue
-            }
-            if(__date[i] == _date[i]){
-                continue
-            }
-            if(__date[i].indexOf("/") > 0){
-                let tmp: any[] = __date[i].split("/");
-                if(tmp[0] == "*" && _date[i] % tmp[1] == 0){
-                    continue
-                }
-            }
-            return false
+            if(!this.validate(__date[i], _date[i])) return false;
         }
         return true
+    }
+
+    private validate(str: any, time: number):boolean{
+        if(str == "*"){
+            return true
+        }
+        if(str == time){
+            return true
+        }
+        if(str.indexOf(",") > 0){
+            let tmp: any[] = str.split(",");
+            for(let i in tmp){
+                if(this.validate(tmp[i], time)) return true;
+            }
+            return false;
+        }
+        if(str.indexOf("-") > 0){
+            let tmp: any[] = str.split("-");
+            for(let i=tmp[0];i<=tmp[1];i++){
+                if(this.validate(tmp[i], time)) return true;
+            }
+            return false;
+        }
+        if(str.indexOf("/") > 0){
+            let tmp: any[] = str.split("/");
+            if(tmp[0] == "*" && time % tmp[1] == 0){
+                return true
+            }
+        }
+        return false
     }
 }
