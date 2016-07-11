@@ -35,6 +35,16 @@ export const STOP:number = 6; //停止执行
 
 export const UNKNOWN:number = 0; //未知
 
+
+export const playBookStatus: any = {
+    1: "等待执行",
+    2: "执行中",
+    3: "执行结束",
+    4: "取消执行",
+    5: "错误中断",
+    6: "停止执行"
+};
+
 // script执行状态
 export const SUCCESS:number = 1; //执行成功
 export const FAIL:number = 2; //执行失败

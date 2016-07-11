@@ -21,7 +21,6 @@ const initialValue: playbookData = {
     showList: [],
     count: {all: 0},
     type: "all"
-
 };
 
 function PlayBook(state = initialValue, action: any) {

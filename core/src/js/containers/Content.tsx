@@ -17,6 +17,8 @@ import RaisedButton = require('material-ui/lib/raised-button');
 import Platform from "../../../../app/tools/Platform";
 import PlaybookFactory from "./PlaybookFactory";
 import {playbookData} from "../reducers/PlayBook";
+import "../../../../app/tools/Util";
+import {playBookStatus} from "../../../Constant";
 
 
 interface ContentProp {
@@ -87,10 +89,10 @@ class Content extends React.Component<ContentProp, any> {
                 <Table onCellClick={this.__click.bind(this)}>
                     <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
                         <TableRow>
-                            <TableHeaderColumn tooltip="The ID">ID</TableHeaderColumn>
-                            <TableHeaderColumn tooltip="The Name">Name</TableHeaderColumn>
-                            <TableHeaderColumn tooltip="The Status">Status</TableHeaderColumn>
-                            <TableHeaderColumn tooltip="The Time">Time</TableHeaderColumn>
+                            <TableHeaderColumn tooltip="ID">ID</TableHeaderColumn>
+                            <TableHeaderColumn tooltip="脚本名称">Name</TableHeaderColumn>
+                            <TableHeaderColumn tooltip="脚本状态">Status</TableHeaderColumn>
+                            <TableHeaderColumn tooltip="更新时间">Time</TableHeaderColumn>
                         </TableRow>
                     </TableHeader>
                     <TableBody displayRowCheckbox={false} showRowHover={true}>
@@ -98,7 +100,7 @@ class Content extends React.Component<ContentProp, any> {
                         <TableRow key={this.props.playbook.map[row].id} selectable={true}>
                             <TableRowColumn>{this.props.playbook.map[row].id}</TableRowColumn>
                             <TableRowColumn>{this.props.playbook.map[row].type}</TableRowColumn>
-                            <TableRowColumn>{this.props.playbook.map[row].state}</TableRowColumn>
+                            <TableRowColumn>{playBookStatus[this.props.playbook.map[row].state]}</TableRowColumn>
                             <TableRowColumn>{this.props.playbook.map[row].update_time}</TableRowColumn>
                         </TableRow>
                             ))}

@@ -4,6 +4,7 @@
 
 /// <reference path="../typings/express/express.d.ts" />
 
+import "./tools/Extend";
 import * as express from "express";
 import jsonFile from "./tools/JsonFile";
 import {create as createLogger, middle as loggerMiddle} from "./tools/Log";

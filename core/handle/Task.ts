@@ -10,7 +10,6 @@ import {Base as BasePlaybook} from "../playbook/Base";
 import {Playbook, PlaybookModel} from "../model/playbook";
 import {Logger} from "bunyan";
 import {Factory as PlaybookFactory} from "../playbook/Factory";
-import {Time} from "../../app/tools/Time";
 
 interface TaskData{
     type: number;
@@ -49,7 +48,7 @@ export default class Task {
     private init(){
         let playbookModel = new PlaybookModel(this.app);
         playbookModel.getWaitPlaybook().then((playbookList:Playbook[])=>{
-            for(let i in playbookList){
+            for(let i=0;i<playbookList.length;i++){
                 this.events.emit("add", Constant.TASK_TYPE_PLAYBOOK, playbookList[i].id);
             }
         });
@@ -83,17 +82,17 @@ export default class Task {
     }
 
     private handleAutoPlaybook(){
-        let time = new Time();
+        let date = new Date();
         let typeMap = PlaybookFactory.getPlaybookTypeMap();
         for(let i in typeMap){
             if(typeMap[i].auto){
-                if(time.judge(typeMap[i]["autoTime"])){
+                if(date.judge(typeMap[i]["autoTime"])){
                     this.events.emit("add", Constant.TASK_TYPE_ADDPLAYBOOK, i);
                 }
             }
         }
 
-        this.events.emit("addTime", time.getTime(), Constant.TASK_TYPE_AUTOPLAYBOOK);
+        this.events.emit("addTime", date.getTime()+(60*1000), Constant.TASK_TYPE_AUTOPLAYBOOK);
         return Promise.resolve(true);
     }
 
@@ -112,6 +111,7 @@ export default class Task {
     private handlePlaybookTask(playbookId: number):Promise<Playbook>{
         return new PlaybookModel(this.app).get(playbookId)
             .then((playbook: Playbook)=>{
+                if(!playbook) return Promise.reject(new Error("playbook 不存在"));
                 if(!PlaybookFactory.isHasPlaybook(playbook.type)) return Promise.reject(new Error("playbook type 不存在"));
                 let playbookType = PlaybookFactory.getPlaybook(playbook.type);
                 if(!playbookType) return Promise.reject(new Error("playbook type 选择错误"));
@@ -137,7 +137,7 @@ export default class Task {
     }
 
     private addTime(time: number, type: number, data: any){
-        let nowTime = new Time().getTime();
+        let nowTime = new Date().getTime();
         let _time = time - nowTime;
         if(_time > 0){
             setTimeout(()=>{

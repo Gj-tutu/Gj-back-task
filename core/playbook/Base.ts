@@ -8,7 +8,6 @@ import {Playbook, PlaybookModel} from "../model/playbook";
 import CoreApp from "../App";
 import * as Constant from "../Constant";
 import {EventEmitter} from "events";
-import {Time} from "../../app/tools/Time";
 
 export class Script{
     private name:string;
@@ -67,7 +66,7 @@ export class Script{
         this.state = state;
         if(handleState) this.handleState = handleState;
         if(resultState) this.resultState = resultState;
-        this.overTime = new Time().getTimeStamp();
+        this.overTime = new Date().getTimeStamp();
     }
 
     public end(resultState?:number){
