@@ -13,6 +13,7 @@ import injectTapEventPlugin = require("react-tap-event-plugin");
 import * as ReactDom from "react-dom";
 import * as React from "react";
 import Container from "./js/containers/Container";
+import "../../app/tools/Extend";
 
 injectTapEventPlugin();
 class Index {

@@ -96,18 +96,25 @@ class Content extends React.Component<ContentProp, any> {
                         </TableRow>
                     </TableHeader>
                     <TableBody displayRowCheckbox={false} showRowHover={true}>
-                        {this.props.playbook.showList.map( (row: any, index: number) => (
-                        <TableRow key={this.props.playbook.map[row].id} selectable={true}>
-                            <TableRowColumn>{this.props.playbook.map[row].id}</TableRowColumn>
-                            <TableRowColumn>{this.props.playbook.map[row].type}</TableRowColumn>
-                            <TableRowColumn>{playBookStatus[this.props.playbook.map[row].state]}</TableRowColumn>
-                            <TableRowColumn>{this.props.playbook.map[row].update_time}</TableRowColumn>
-                        </TableRow>
-                            ))}
+                        {this.props.playbook.showList.map(this.playbookItem.bind(this))}
                     </TableBody>
                 </Table>
             </div>
         );
+    }
+    private playbookItem(row: any, index: number){
+        let item = this.props.playbook.map[row];
+        let date = new Date();
+        date.setTimeStamp(item.update_time);
+        let updateTime = date.format("yyyy-MM-dd hh:mm:ss");
+        return (
+            <TableRow key={item.id} selectable={true}>
+                <TableRowColumn>{item.id}</TableRowColumn>
+                <TableRowColumn>{item.type}</TableRowColumn>
+                <TableRowColumn>{playBookStatus[item.state]}</TableRowColumn>
+                <TableRowColumn>{updateTime}</TableRowColumn>
+            </TableRow>
+        )
     }
 
     private __close(){

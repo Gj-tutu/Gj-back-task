@@ -211,7 +211,9 @@ export class Model extends BaseModel{
     }
 
     public add(data: Record):Promise<Record>{
-        data.set(this.createTime, new Date().getTimeStamp());
+        let time = new Date().getTimeStamp();
+        data.set(this.createTime, time);
+        data.set(this.updateTime, time);
         let keys: any[] = this.field;
         let values: any = {};
         for(let i=0;i<keys.length;i++){

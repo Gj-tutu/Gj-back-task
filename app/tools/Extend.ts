@@ -5,6 +5,7 @@
 
 declare interface Date {
     getTimeStamp(): number;
+    setTimeStamp(time:number): void;
     format(fmt: string): string;
     getDetail(): number[];
     judge(str: string): boolean;
@@ -16,6 +17,9 @@ Date.prototype.getTimeStamp = function(){
         this._timeStamp = Math.ceil(this.getTime()/1000);
     }
     return this._timeStamp;
+};
+Date.prototype.setTimeStamp = function(time: number){
+    this.setTime(time*1000);
 };
 Date.prototype.format = function(fmt:string){
     var o: any = {
