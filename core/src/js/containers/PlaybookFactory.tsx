@@ -22,6 +22,8 @@ interface AppProp {
     playbookAction: any;
 }
 
+var playbookMap: any = {"demo": Demo, "autoDemo": AutoDemo};
+
 class PlaybookFactory extends React.Component<AppProp, any> {
 
     constructor(props: any, context: any) {
@@ -71,10 +73,8 @@ class PlaybookFactory extends React.Component<AppProp, any> {
             playbook: playbook,
             action: this.props.playbookAction
         };
-        if(type == "demo"){
-            return (<Demo {...param}/>)
-        }else if(type == "autoDemo"){
-            return (<AutoDemo {...param}/>)
+        if(playbookMap[type]){
+            return React.createElement(playbookMap[type], param)
         }else{
             return (<Base {...param}/>)
         }
