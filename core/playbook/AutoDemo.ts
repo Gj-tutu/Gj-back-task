@@ -8,7 +8,7 @@ import {Playbook} from "../model/playbook";
 import * as Constant from "../Constant";
 import {Setting} from "./Base";
 
-export const setting: Setting = {name: "autoDemo", title: "自动Demo", auto: true, autoTime: "1,31 */1 * * *"};
+export const setting: Setting = {name: "autoDemo", title: "自动Demo", auto: true, autoTime: "*/1 */1 * * *"};
 
 export default class AutoDemo extends Base{
 
@@ -30,10 +30,12 @@ export default class AutoDemo extends Base{
         };
         return new Promise((resolve : (value?: any) => void, reject: (error?: any) => void)=>{
             if(script.getName() == "test"){
+                let startTime = new Date().format("yyyy-MM-dd hh:mm:ss");
                 setTimeout(()=>{
-                    result.data = "脚本执行成功";
+                    let endTime = new Date().format("yyyy-MM-dd hh:mm:ss");
+                    result.data = `脚本开始时间:${startTime}, 脚本结束时间:${endTime}.`;
                     resolve(result);
-                }, 1000*30);
+                }, 30*1000);
             }else{
                 reject(new Error("脚本为空"));
             }
