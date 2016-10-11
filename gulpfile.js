@@ -6,7 +6,7 @@
 var gulp = require('gulp');
 var path = require("path");
 var gutil = require("gulp-util");
-var config = require("./app/config");
+var config = require("./config");
 var clean = require('gulp-clean');
 var shell = require('gulp-shell');
 
@@ -148,4 +148,3 @@ gulp.task("webpack-dev-server", function(callback) {
 });
 
 gulp.task("init", ["ts", "sass", "webpack_clean", "webpack", "webpack_handle"]);
-

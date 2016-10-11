@@ -5,8 +5,8 @@
 /// <reference path="../../typings/node/node.d.ts" />
 
 class JsonFile {
-    public static read(fileName: string): any {
-        return require(fileName);
+    public static read(filePath: string): any {
+        return require(filePath);
     }
 }
 

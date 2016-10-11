@@ -12,8 +12,6 @@ import {Mysql, connect as connectMysql} from "./tools/Mysql";
 import {Redis, connect as connectRedis} from "./tools/Redis";
 import {Email, connect as connectEmail} from "./tools/Email";
 
-const config = jsonFile.read("../config");
-
 class App {
 
     public express: express.Application;
@@ -26,7 +24,7 @@ class App {
 
     constructor() {
         this.express = express();
-        this.config = config;
+        this.config = jsonFile.read(__dirname+"/../config");
     }
 
     /**
@@ -49,7 +47,7 @@ class App {
     public start(): void {
         this.express.set("app", this);
         this.express.set("name", this.name);
-        this.logger = createLogger(this.express, config.DEBUG);
+        this.logger = createLogger(this.express, this.config.DEBUG);
 
         this.init();
         this.express.use(loggerMiddle(this.logger));
@@ -156,6 +154,3 @@ class App {
 }
 
 export default App
-
-
-
