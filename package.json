@@ -55,8 +55,10 @@
     "webpack-dev-server": "^1.14.0"
   },
   "scripts": {
-    "init": "tsd install & chmod -R +x typings & gulp ts",
+    "init": "tsd install & chmod -R +x typings & tsc",
     "tsd-install": "tsd install --save ",
+    "gulp": "gulp",
+    "tsc": "tsc",
     "dev": "node index.js start core -d -m",
     "mock": "node index.js start core -m",
     "test": "mocha --recursive --bail ",
